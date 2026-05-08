@@ -116,7 +116,7 @@ def get_data_list_from_join2():
         return df
 
     except Exception as e:
-        print(f"❌ Error durante el proceso ETL (catalogo): {e}")
+        print(f"❌ Error durante el proceso ETL (Películas): {e}")
         
 if __name__ == "__main__":
     test_connection()
