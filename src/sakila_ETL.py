@@ -69,6 +69,56 @@ def get_data_list_from_join():
     except Exception as e:
         print(f"❌ Error durante el proceso ETL: {e}")
 
+def get_data_list_from_join2():
+    """Obtener datos del catálogo y exportar a CSV"""
+    engine = get_engine()
+    
+    # Consulta optimizada con JOIN y GROUP BY
+    join_query_sql = """ 
+    SELECT 
+        f.film_id,
+        LOWER(TRIM(f.title)) AS title,
+        LOWER(TRIM(f.description)) AS description,
+        f.release_year,
+        LOWER(l.name) AS language,
+        LOWER(cat.name) AS category,
+        f.length,
+        f.rating,
+        -- Columna derivada
+        CASE WHEN f.length >= 120 THEN 1 ELSE 0 END AS is_long_film,
+        -- Conteo de copias usando JOIN (más seguro para la sincronización)
+        COUNT(i.inventory_id) AS inventory_count
+    FROM film f
+    INNER JOIN language l ON f.language_id = l.language_id
+    LEFT JOIN film_category fc ON f.film_id = fc.film_id
+    LEFT JOIN category cat ON fc.category_id = cat.category_id
+    LEFT JOIN inventory i ON f.film_id = i.film_id
+    WHERE 
+        f.length > 0 
+        AND f.rating IS NOT NULL 
+        AND f.title IS NOT NULL
+    GROUP BY f.film_id, l.name, cat.name;
+    """
+    
+    try:
+        # 'begin' maneja la transacción y asegura que los comandos estén en sync
+        with engine.begin() as connection:
+            df = pd.read_sql(text(join_query_sql), connection)
+        
+        if not os.path.exists('output'):
+            os.makedirs('output')
+
+        output_path = "output/catalogo_peliculas.csv"
+        df.to_csv(output_path, index=False, encoding='utf-8')
+
+        print(f"⭐ DataFrame creado y guardado en: {output_path}")
+        print(df.head())
+        return df
+
+    except Exception as e:
+        print(f"❌ Error durante el proceso ETL (Películas): {e}")
+        
 if __name__ == "__main__":
     test_connection()
     get_data_list_from_join()
+    get_data_list_from_join2()
