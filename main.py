@@ -65,8 +65,8 @@ def run():
     print("Iniciando extracción de reportes...")
     
     # Ejecutamos la función 3 veces para obtener los 3 CSVs independientes
-    generar_reporte_csv(SQL_CLIENTES, "actividad_clientes")
-    generar_reporte_csv(SQL_CATALOGO, "catalogo_peliculas")
+    generar_reporte_csv(SQL_CLIENTES,"actividad_clientes")
+    generar_reporte_csv(SQL_CATALOGO,"catalogo_peliculas")
     # generar_reporte_csv(SQL_ACTORES, "elenco_popularidad")
     
     print("¡Todos los archivos han sido generados en la carpeta /output!")

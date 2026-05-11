@@ -5,7 +5,10 @@ from src.config import *
 
 def get_engine():
     # Construye la URL de conexión y devuelve un engine de SQLAlchemy
-    url_db = f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    try:
+        url_db = f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
+    except:
+        print("Error al conectar")
     return create_engine(url_db)
 
 def generar_reporte_csv(query_sql, nombre_archivo):
@@ -28,3 +31,4 @@ def generar_reporte_csv(query_sql, nombre_archivo):
     except Exception as e:
         print(f"❌ Error en {nombre_archivo}: {e}")
         return False
+    
