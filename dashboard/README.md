@@ -112,7 +112,7 @@ Criterio de Tipo de Producción:
 
 Cortometraje: Películas con una duración igual o inferior a 60 minutos.
 
-Película: Producciones que superan los 60 minutos.
+### Película: Producciones que superan los 60 minutos.
 ---
 ## Respecto a la tabla Elenco y Popularidad
 
