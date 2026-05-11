@@ -59,7 +59,24 @@ SELECT
         f.length > 0              -- Eliminar duraciones <= 0
         AND f.rating IS NOT NULL   -- Eliminar ratings nulos
         AND f.title IS NOT NULL   -- Integridad básica"""
-SQL_ACTORES = "SELECT ... FROM actor ..." # Tu tercera query
+SQL_ACTORES =  """
+SELECT 
+    f.film_id,
+    f.title AS titulo_pelicula,
+    a.actor_id,
+    CONCAT(LOWER(a.first_name), ' ', LOWER(a.last_name)) AS actor_full_name,
+    -- Conteo de actores en esta película específica
+    (SELECT COUNT(*) 
+        FROM film_actor fa2 
+        WHERE fa2.film_id = f.film_id) AS total_actores_en_pelicula,
+    -- Conteo de películas en las que participa este actor
+    (SELECT COUNT(*) 
+        FROM film_actor fa3 
+        WHERE fa3.actor_id = a.actor_id) AS total_peliculas_del_actor
+FROM film f
+INNER JOIN film_actor fa ON f.film_id = fa.film_id
+INNER JOIN actor a ON fa.actor_id = a.actor_id
+ORDER BY f.title ASC # Tu tercera query"""
 
 def run():
     print("Iniciando extracción de reportes...")
@@ -67,9 +84,10 @@ def run():
     # Ejecutamos la función 3 veces para obtener los 3 CSVs independientes
     generar_reporte_csv(SQL_CLIENTES, "actividad_clientes")
     generar_reporte_csv(SQL_CATALOGO, "catalogo_peliculas")
-    # generar_reporte_csv(SQL_ACTORES, "elenco_popularidad")
+    generar_reporte_csv(SQL_ACTORES, "elenco_popularidad")
     
     print("¡Todos los archivos han sido generados en la carpeta /output!")
 
 if __name__ == "__main__":
     run()
+
