@@ -116,9 +116,3 @@ Ves ejecutando cada parte del fichero para realizar la limpieza de los 3 dataset
 Crea tu archivo Excel en la carpeta `dashboard/`:
 
 **Ubicación:** `dashboard/Sakila_Dashboard.xlsx`
-
-**💡 Estructura recomendada:** 4 hojas
-- `Dashboard` - Aquí pondrás tus gráficos y análisis visual
-- `Datos Diarios` - Para conectar `../output/resumen_diario.csv`
-- `Top Peliculas` - Para conectar `../output/top_peliculas.csv`
-- `Por Categoria` - Para conectar `../output/por_categoria.csv`
