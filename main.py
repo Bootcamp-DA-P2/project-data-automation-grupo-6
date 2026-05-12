@@ -1,4 +1,7 @@
 from src.sakila_ETL import generar_reporte_csv
+import platform
+import subprocess
+import os
 
 # Definimos las 3 consultas
 SQL_CLIENTES = """SELECT 
@@ -78,6 +81,31 @@ INNER JOIN film_actor fa ON f.film_id = fa.film_id
 INNER JOIN actor a ON fa.actor_id = a.actor_id
 ORDER BY f.title ASC # Tu tercera query"""
 
+def abrir_dashboard():
+    """
+    Busca y abre el archivo Excel del Dashboard en la carpeta especificada.
+    """
+    # Construimos la ruta relativa al archivo
+    # Asumiendo que el script se ejecuta desde la raíz del proyecto
+    ruta_archivo = os.path.join("dashboard", "Sakila_Dashboard.xlsx")
+
+    # Verificamos si el archivo existe para evitar errores de sistema
+    if os.path.exists(ruta_archivo):
+        print(f"Abriendo {ruta_archivo}...")
+        
+        # Detectamos el sistema operativo para usar el comando correcto
+        sistema = platform.system()
+        
+        if sistema == "Windows":
+            os.startfile(ruta_archivo)
+        elif sistema == "Darwin":  # macOS
+            subprocess.call(["open", ruta_archivo])
+        else:  # Linux
+            subprocess.call(["xdg-open", ruta_archivo])
+    else:
+        print(f"Error: No se encontró el archivo en {ruta_archivo}")
+        print("Asegúrate de que la carpeta 'dashboard' y el archivo existen.")
+
 def run():
     print("Iniciando extracción de reportes...")
     
@@ -85,13 +113,9 @@ def run():
     generar_reporte_csv(SQL_CLIENTES, "actividad_clientes")
     generar_reporte_csv(SQL_CATALOGO, "catalogo_peliculas")
     generar_reporte_csv(SQL_ACTORES, "elenco_popularidad")
+    abrir_dashboard()
     
     print("¡Todos los archivos han sido generados en la carpeta /output!")
 
 if __name__ == "__main__":
     run()
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> c43f69063596023884e2ae9a947ab112d1f5927d
