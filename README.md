@@ -2,7 +2,7 @@
 
 Este proyecto automatiza la extracción y análisis de datos de la base de datos SQL usando Python, generando varios archivos CSV que se conectan automáticamente a un libro de Excel.
 
-**✨ Sin macros - Solo Python + Excel con F5**
+**✨ Sin macros - Solo Python + Excel**
 
 ---
 
